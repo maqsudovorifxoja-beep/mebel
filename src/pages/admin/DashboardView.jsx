@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useProducts } from '../../context/ProductContext';
 import { useOrders } from '../../context/OrderContext';
 import { 
@@ -15,6 +15,7 @@ import {
 export const DashboardView = ({ setActiveTab }) => {
   const { products } = useProducts();
   const { orders, customInquiries, updateOrderStatus } = useOrders();
+  const [hoveredBar, setHoveredBar] = useState(null);
 
   const totalRevenue = orders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
   const pendingOrders = orders.filter((o) => o.status === 'new').length;
@@ -176,39 +177,137 @@ export const DashboardView = ({ setActiveTab }) => {
                 Oxirgi 6 oylik buyurtmalar hajmi
               </p>
             </div>
-            <span className="badge badge-gold">2026 Yil</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className="badge badge-gold">2026 Yil</span>
+            </div>
           </div>
 
+          {/* Chart Display Area with Grid Lines */}
+          <div
+            style={{
+              position: 'relative',
+              height: '190px',
+              borderBottom: '1px solid var(--border-light)',
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'space-around',
+              padding: '0 8px',
+            }}
+          >
+            {/* Background horizontal guideline lines */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                pointerEvents: 'none',
+                opacity: 0.15,
+              }}
+            >
+              <div style={{ borderTop: '1px dashed var(--text-primary)', width: '100%' }} />
+              <div style={{ borderTop: '1px dashed var(--text-primary)', width: '100%' }} />
+              <div style={{ borderTop: '1px dashed var(--text-primary)', width: '100%' }} />
+              <div style={{ borderTop: '1px solid transparent', width: '100%' }} />
+            </div>
+
+            {/* Vertical Bars */}
+            {salesData.map((bar, i) => {
+              const maxAmount = 120;
+              const maxBarHeight = 135; // px
+              const barPixelHeight = Math.max(20, Math.round((bar.amount / maxAmount) * maxBarHeight));
+              const isLatest = i === salesData.length - 1;
+              const isHovered = hoveredBar === i;
+
+              return (
+                <div
+                  key={i}
+                  onMouseEnter={() => setHoveredBar(i)}
+                  onMouseLeave={() => setHoveredBar(null)}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    height: '100%',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    zIndex: 2,
+                    padding: '0 6px',
+                  }}
+                >
+                  {/* Tooltip / Value on top */}
+                  <span
+                    style={{
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      marginBottom: '6px',
+                      color: isLatest || isHovered ? 'var(--accent-gold)' : 'var(--text-secondary)',
+                      transform: isHovered ? 'scale(1.15) translateY(-2px)' : 'scale(1)',
+                      transition: 'transform 0.2s ease, color 0.2s ease',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {bar.amount}M
+                  </span>
+
+                  {/* The Graphic Bar Element */}
+                  <div
+                    style={{
+                      width: '38px',
+                      height: `${barPixelHeight}px`,
+                      background: isLatest
+                        ? 'linear-gradient(180deg, #e6b800 0%, #b8860b 100%)'
+                        : isHovered
+                        ? 'linear-gradient(180deg, var(--accent-gold) 0%, rgba(212, 160, 23, 0.5) 100%)'
+                        : 'linear-gradient(180deg, rgba(212, 160, 23, 0.45) 0%, rgba(212, 160, 23, 0.15) 100%)',
+                      border: isLatest
+                        ? '1px solid #ffd700'
+                        : isHovered
+                        ? '1px solid var(--accent-gold)'
+                        : '1px solid rgba(212, 160, 23, 0.3)',
+                      borderRadius: '6px 6px 0 0',
+                      boxShadow: isLatest
+                        ? '0 4px 14px rgba(230, 184, 0, 0.35)'
+                        : isHovered
+                        ? '0 4px 12px rgba(212, 160, 23, 0.25)'
+                        : 'none',
+                      transform: isHovered ? 'scaleY(1.04)' : 'scaleY(1)',
+                      transformOrigin: 'bottom',
+                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* X-Axis Month Labels Row */}
           <div
             style={{
               display: 'flex',
-              alignItems: 'flex-end',
-              justifyContent: 'space-between',
-              height: '200px',
-              paddingTop: '20px',
-              borderBottom: '1px solid var(--border-light)',
+              justifyContent: 'space-around',
+              paddingTop: '12px',
+              paddingLeft: '8px',
+              paddingRight: '8px',
             }}
           >
             {salesData.map((bar, i) => {
-              const heightPercent = (bar.amount / 120) * 100;
+              const isLatest = i === salesData.length - 1;
+              const isHovered = hoveredBar === i;
               return (
-                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', flex: 1 }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent-gold)' }}>
-                    {bar.amount}M
-                  </span>
-                  <div
-                    style={{
-                      width: '36px',
-                      height: `${heightPercent}%`,
-                      backgroundColor: i === salesData.length - 1 ? 'var(--accent-gold)' : 'var(--bg-secondary)',
-                      border: '1px solid var(--border-light)',
-                      borderRadius: '4px 4px 0 0',
-                      transition: 'height 0.4s ease',
-                    }}
-                  />
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                    {bar.month}
-                  </span>
+                <div
+                  key={i}
+                  style={{
+                    textAlign: 'center',
+                    fontSize: '0.82rem',
+                    fontWeight: isLatest || isHovered ? 600 : 400,
+                    color: isLatest || isHovered ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    transition: 'color 0.2s ease',
+                  }}
+                >
+                  {bar.month}
                 </div>
               );
             })}
