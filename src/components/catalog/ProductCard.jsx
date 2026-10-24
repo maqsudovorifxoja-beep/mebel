@@ -16,6 +16,7 @@ export const ProductCard = ({ product, onQuickView }) => {
     product.colors && product.colors.length > 0 ? product.colors[0] : null
   );
   const [isAdded, setIsAdded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const formatPrice = (amount) => {
     return new Intl.NumberFormat('uz-UZ').format(amount) + ` ${t.catalog.currency}`;
@@ -48,16 +49,11 @@ export const ProductCard = ({ product, onQuickView }) => {
         height: '100%',
         position: 'relative',
       }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Product Image Container */}
-      <div
-        style={{
-          position: 'relative',
-          paddingTop: '80%',
-          overflow: 'hidden',
-          backgroundColor: 'var(--bg-secondary)',
-        }}
-      >
+      {/* Image */}
+      <div style={{ position: 'relative', paddingTop: '100%', overflow: 'hidden', backgroundColor: 'var(--bg-secondary)' }}>
         <Link to={`/product/${product.id}`} style={{ position: 'absolute', inset: 0 }}>
           <img
             src={product.images[0]}
@@ -67,24 +63,17 @@ export const ProductCard = ({ product, onQuickView }) => {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+              transition: 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)',
+              transform: isHovered ? 'scale(1.05)' : 'scale(1)',
             }}
-            onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.06)')}
-            onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1.0)')}
           />
         </Link>
 
         {/* Badges */}
-        <div style={{ position: 'absolute', top: '12px', left: '12px', display: 'flex', gap: '6px' }}>
-          {product.badge === 'bestseller' && (
-            <span className="badge badge-gold">Bestseller</span>
-          )}
-          {product.badge === 'new' && (
-            <span className="badge badge-new">New 2026</span>
-          )}
-          {product.badge === 'premium' && (
-            <span className="badge badge-gold">Atelier</span>
-          )}
+        <div style={{ position: 'absolute', top: '10px', left: '10px', display: 'flex', gap: '5px' }}>
+          {product.badge === 'bestseller' && <span className="badge badge-gold">Best</span>}
+          {product.badge === 'new' && <span className="badge badge-new">New</span>}
+          {product.badge === 'premium' && <span className="badge badge-gold">Atelier</span>}
           {product.oldPrice && (
             <span className="badge badge-sale">
               -{Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)}%
@@ -92,36 +81,29 @@ export const ProductCard = ({ product, onQuickView }) => {
           )}
         </div>
 
-        {/* Action icons (Wishlist & Quick View) */}
+        {/* Action icons */}
         <div
           style={{
             position: 'absolute',
-            top: '12px',
-            right: '12px',
+            top: '10px',
+            right: '10px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px',
+            gap: '6px',
+            opacity: isHovered ? 1 : 0,
+            transform: isHovered ? 'translateX(0)' : 'translateX(6px)',
+            transition: 'opacity 0.2s ease, transform 0.2s ease',
           }}
         >
           <button
             onClick={handleToggleWishlist}
             style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--surface-glass)',
-              backdropFilter: 'blur(8px)',
-              border: '1px solid var(--border-light)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              ...actionBtnStyle,
               color: wishlisted ? '#e53935' : 'var(--text-primary)',
-              transition: 'all var(--transition-fast)',
-              boxShadow: 'var(--shadow-sm)',
             }}
             aria-label="Wishlist toggle"
           >
-            <Heart size={16} fill={wishlisted ? '#e53935' : 'none'} />
+            <Heart size={14} fill={wishlisted ? '#e53935' : 'none'} />
           </button>
 
           {onQuickView && (
@@ -131,83 +113,50 @@ export const ProductCard = ({ product, onQuickView }) => {
                 e.stopPropagation();
                 onQuickView(product);
               }}
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                backgroundColor: 'var(--surface-glass)',
-                backdropFilter: 'blur(8px)',
-                border: '1px solid var(--border-light)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-primary)',
-                transition: 'all var(--transition-fast)',
-                boxShadow: 'var(--shadow-sm)',
-              }}
+              style={actionBtnStyle}
               title={t.catalog.quickView}
               aria-label="Quick view"
             >
-              <Eye size={16} />
+              <Eye size={14} />
             </button>
           )}
         </div>
       </div>
 
-      {/* Card Content */}
-      <div
-        style={{
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          flex: 1,
-          justifyContent: 'space-between',
-        }}
-      >
+      {/* Content */}
+      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
         <div>
-          {/* Rating & reviews */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', color: '#ffb300' }}>
-              <Star size={14} fill="#ffb300" />
-            </div>
-            <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>{product.rating}</span>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              ({product.reviewsCount})
-            </span>
+          {/* Rating */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '6px' }}>
+            <Star size={12} fill="#d4a017" color="#d4a017" />
+            <span style={{ fontSize: '0.78rem', fontWeight: 600 }}>{product.rating}</span>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>({product.reviewsCount})</span>
           </div>
 
-          {/* Product Title */}
+          {/* Title */}
           <Link to={`/product/${product.id}`}>
-            <h3
-              style={{
-                fontSize: '1.15rem',
-                fontWeight: 600,
-                color: 'var(--text-primary)',
-                marginBottom: '10px',
-                lineHeight: 1.35,
-              }}
-            >
+            <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '8px', lineHeight: 1.35 }}>
               {title}
             </h3>
           </Link>
 
-          {/* Color preview dots */}
+          {/* Colors */}
           {product.colors && product.colors.length > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '12px' }}>
               {product.colors.map((color, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedColor(color)}
                   style={{
-                    width: '18px',
-                    height: '18px',
+                    width: '16px',
+                    height: '16px',
                     borderRadius: '50%',
                     backgroundColor: color.hex,
-                    border: selectedColor?.hex === color.hex ? '2px solid var(--accent-gold)' : '1px solid var(--border-light)',
+                    border: selectedColor?.hex === color.hex ? '2px solid var(--accent)' : '1px solid var(--border)',
                     padding: 0,
                     outline: 'none',
-                    transform: selectedColor?.hex === color.hex ? 'scale(1.15)' : 'scale(1)',
-                    transition: 'transform var(--transition-fast)',
+                    transition: 'transform 0.15s ease',
+                    transform: selectedColor?.hex === color.hex ? 'scale(1.2)' : 'scale(1)',
                   }}
                   title={color.name[lang] || color.name.uz}
                 />
@@ -217,28 +166,13 @@ export const ProductCard = ({ product, onQuickView }) => {
         </div>
 
         {/* Price & Action */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingTop: '14px',
-            borderTop: '1px solid var(--border-light)',
-            marginTop: '8px',
-          }}
-        >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '12px', borderTop: '1px solid var(--border)', marginTop: '4px' }}>
           <div>
-            <div style={{ fontSize: '1.18rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+            <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               {formatPrice(product.price)}
             </div>
             {product.oldPrice && (
-              <div
-                style={{
-                  fontSize: '0.82rem',
-                  textDecoration: 'line-through',
-                  color: 'var(--text-muted)',
-                }}
-              >
+              <div style={{ fontSize: '0.78rem', textDecoration: 'line-through', color: 'var(--text-muted)' }}>
                 {formatPrice(product.oldPrice)}
               </div>
             )}
@@ -247,19 +181,16 @@ export const ProductCard = ({ product, onQuickView }) => {
           <button
             onClick={handleAddToCart}
             className={`btn btn-sm ${isAdded ? 'btn-primary' : 'btn-secondary'}`}
-            style={{
-              padding: '8px 14px',
-              borderRadius: 'var(--radius-sm)',
-            }}
+            style={{ padding: '6px 12px', fontSize: '0.78rem' }}
           >
             {isAdded ? (
               <>
-                <Check size={15} />
+                <Check size={13} />
                 <span>{t.catalog.addedToCart}</span>
               </>
             ) : (
               <>
-                <ShoppingBag size={15} />
+                <ShoppingBag size={13} />
                 <span>{t.catalog.addToCart}</span>
               </>
             )}
@@ -268,4 +199,18 @@ export const ProductCard = ({ product, onQuickView }) => {
       </div>
     </div>
   );
+};
+
+const actionBtnStyle = {
+  width: '32px',
+  height: '32px',
+  borderRadius: '50%',
+  backgroundColor: 'var(--surface)',
+  border: '1px solid var(--border)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'var(--text-primary)',
+  transition: 'all 0.15s ease',
+  boxShadow: 'var(--shadow-sm)',
 };

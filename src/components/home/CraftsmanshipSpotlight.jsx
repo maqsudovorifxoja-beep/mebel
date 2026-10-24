@@ -1,47 +1,47 @@
 import React from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { Sparkles, Shield, Cpu, Compass } from 'lucide-react';
+import { Shield, Sparkles, Compass, Cpu } from 'lucide-react';
 
 export const CraftsmanshipSpotlight = () => {
   const { lang } = useLanguage();
 
   const materials = [
     {
-      title: { uz: 'Tabiiy Yevropa Emoni va Yongʻogʻi', ru: 'Массив Европейского Дуба и Ореха', en: 'Solid European Oak & Walnut' },
+      title: { uz: 'Yevropa Emon va Yongʻogʻi', ru: 'Массив Европейского Дуба', en: 'European Oak & Walnut' },
       desc: {
-        uz: 'FSC sertifikatlangan, maxsus quritish kameralarida 8-10% namlik darajasiga keltirilgan mustahkam daraxt massivi.',
-        ru: 'Сертифицированная древесина камерной сушки с влажностью 8-10%, не деформирующаяся со временем.',
-        en: 'Kiln-dried to 8-10% moisture content, preventing warping and cracking for lifetimes of use.'
+        uz: 'FSC sertifikatlangan, 8-10% namlik darajasiga quritilgan mustahkam massiv.',
+        ru: 'Камерная сушка до 8-10% влажности, не деформируется со временем.',
+        en: 'Kiln-dried to 8-10% moisture, preventing warping for lifetimes.'
       },
       image: 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?auto=format&fit=crop&w=600&q=80',
       icon: Shield,
     },
     {
-      title: { uz: 'Italiya Baxmali va Tabiiy Charm', ru: 'Итальянский Бархат и Наппа', en: 'Italian Bouclé, Velvet & Nappa' },
+      title: { uz: 'Italiya Baxmali va Charm', ru: 'Итальянский Бархат и Наппа', en: 'Italian Velvet & Nappa' },
       desc: {
-        uz: 'Martindale testi boʻyicha 100 000+ ishqalanishga bardoshli, suv va kirlardan himoyalangan EasyClean qatlami.',
-        ru: '100 000+ циклов истирания по Мартиндейлу, с водоотталкивающим нанопокрытием EasyClean.',
-        en: 'Rated for 100,000+ Martindale rubs with EasyClean stain and liquid resistant barriers.'
+        uz: '100 000+ ishqalanishga bardoshli EasyClean qatlami bilan himoyalangan.',
+        ru: '100 000+ циклов истирания, водоотталкивающее нанопокрытие.',
+        en: '100,000+ Martindale rubs with EasyClean stain resistance.'
       },
       image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80',
       icon: Sparkles,
     },
     {
-      title: { uz: 'Rim Travertini & Calacatta Marmari', ru: 'Римский Травертин и Мрамор', en: 'Roman Travertine & Calacatta Marble' },
+      title: { uz: 'Calacatta Marmari', ru: 'Мрамор Calacatta', en: 'Calacatta Marble' },
       desc: {
-        uz: 'Italiyaning Karara konlaridan keltirilgan, tabiiy polirovka qilingan va dogʻ qoldirmaydigan himoyalangan plitalar.',
-        ru: 'Натуральный камень из итальянских карьеров Каррары с защитой от пищевых красителей и масел.',
-        en: 'Quarried in Italy with oleophobic and stain-resistant sealant for effortless upkeep.'
+        uz: 'Italiya Karara konlaridan keltirilgan, dogʻ qoldirmaydigan himoyali.',
+        ru: 'Натуральный камень Каррары с защитой от пищевых красителей.',
+        en: 'Quarried in Italy with oleophobic sealant for upkeep.'
       },
       image: 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?auto=format&fit=crop&w=600&q=80',
       icon: Compass,
     },
     {
-      title: { uz: 'Avstriya Blum & Hettich Mexanizmlari', ru: 'Фурнитура Blum и Hettich', en: 'Austrian Blum & Hettich Hardware' },
+      title: { uz: 'Blum & Hettich Mexanizm', ru: 'Фурнитура Blum & Hettich', en: 'Blum & Hettich Hardware' },
       desc: {
-        uz: 'Yumshoq pnevmatik yopilish tizimi (soft-close), 100 000 marta silliq harakatlanish kafolati.',
-        ru: 'Плавные доводчики и скрытые направляющие, рассчитанные на 25+ лет безупречной службы.',
-        en: 'Synchronized soft-close runners engineered for 100,000+ effortless open-close movements.'
+        uz: 'Soft-close tizimi, 100 000 marta silliq ishlash kafolati.',
+        ru: 'Плавные доводчики, 25+ лет безупречной службы.',
+        en: 'Soft-close runners, 100,000+ effortless movements.'
       },
       image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80',
       icon: Cpu,
@@ -49,82 +49,140 @@ export const CraftsmanshipSpotlight = () => {
   ];
 
   return (
-    <section className="section" style={{ backgroundColor: 'var(--bg-secondary)' }}>
+    <section className="section" style={{ backgroundColor: 'var(--bg-primary)' }}>
       <div className="container">
-        <div className="section-header">
-          <div className="section-tag">
-            <span>{lang === 'uz' ? 'Hunarmandchilik & Sifat' : lang === 'ru' ? 'Качество и Материалы' : 'Artisanal Materials'}</span>
+        {/* Two-column editorial layout */}
+        <div style={layoutStyle}>
+          {/* Left — sticky text */}
+          <div style={stickyCol}>
+            <div className="section-tag" style={{ justifyContent: 'flex-start' }}>
+              <span>{lang === 'uz' ? 'Sifat & Material' : lang === 'ru' ? 'Качество' : 'Materials'}</span>
+            </div>
+            <h2 style={headingStyle}>
+              {lang === 'uz'
+                ? 'Nega Bizning Mebellar Avloddan-Avlodga Oʻtadi?'
+                : lang === 'ru'
+                ? 'Почему Наша Мебель Служит Десятилетиями?'
+                : 'Built to Transcend Trends'}
+            </h2>
+            <p style={paraStyle}>
+              {lang === 'uz'
+                ? 'Arzon komponentlarga murosasiz. Faqat oliy toifali xomashyo va jahon yetakchilari furniturasi.'
+                : lang === 'ru'
+                ? 'Никаких компромиссов. Только массив, премиальный текстиль и европейская инженерия.'
+                : 'No shortcuts, no synthetics. Pure materials crafted with uncompromising integrity.'}
+            </p>
           </div>
-          <h2 className="section-title">
-            {lang === 'uz'
-              ? 'Nega Bizning Mebellarimiz Avloddan-Avlodga Oʻtadi?'
-              : lang === 'ru'
-              ? 'Почему Наша Мебель Служит Десятилетиями?'
-              : 'Built to Transcend Trends and Generations'}
-          </h2>
-          <p className="section-subtitle">
-            {lang === 'uz'
-              ? 'Biz hech qachon arzon komponentlar bilan murosaga bormaymiz. Faqat oliy toifali xomashyo va jahon yetakchilari furniturasi.'
-              : lang === 'ru'
-              ? 'Мы не идем на компромиссы. Только отборный массив, премиальный текстиль и лучшая европейская инженерия.'
-              : 'No shortcuts, no synthetics where solid wood belongs. Pure materials crafted with uncompromising architectural integrity.'}
-          </p>
-        </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '24px',
-          }}
-        >
-          {materials.map((mat, i) => {
-            const IconComponent = mat.icon;
-            return (
-              <div
-                key={i}
-                className="luxury-card"
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  overflow: 'hidden',
-                }}
-              >
-                <div style={{ height: '180px', overflow: 'hidden' }}>
-                  <img
-                    src={mat.image}
-                    alt={mat.title[lang] || mat.title.uz}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                </div>
-                <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                  <div
-                    style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '8px',
-                      backgroundColor: 'var(--accent-gold-light)',
-                      color: 'var(--accent-gold)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: '16px',
-                    }}
-                  >
-                    <IconComponent size={20} />
+          {/* Right — material cards */}
+          <div style={cardsCol}>
+            {materials.map((mat, i) => {
+              const IconComponent = mat.icon;
+              return (
+                <div key={i} className="luxury-card" style={cardStyle}>
+                  <div style={cardImageWrap}>
+                    <img
+                      src={mat.image}
+                      alt={mat.title[lang] || mat.title.uz}
+                      loading="lazy"
+                      style={cardImage}
+                    />
                   </div>
-                  <h3 style={{ fontSize: '1.15rem', marginBottom: '8px' }}>
-                    {mat.title[lang] || mat.title.uz}
-                  </h3>
-                  <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
-                    {mat.desc[lang] || mat.desc.uz}
-                  </p>
+                  <div style={cardContent}>
+                    <div style={iconBox}>
+                      <IconComponent size={18} />
+                    </div>
+                    <h3 style={cardTitle}>{mat.title[lang] || mat.title.uz}</h3>
+                    <p style={cardDesc}>{mat.desc[lang] || mat.desc.uz}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
   );
+};
+
+const layoutStyle = {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1.4fr',
+  gap: '60px',
+  alignItems: 'start',
+};
+
+const stickyCol = {
+  position: 'sticky',
+  top: '120px',
+};
+
+const headingStyle = {
+  fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)',
+  fontFamily: 'var(--font-display)',
+  fontWeight: 700,
+  lineHeight: 1.18,
+  marginBottom: '18px',
+  letterSpacing: '-0.02em',
+};
+
+const paraStyle = {
+  fontSize: '1rem',
+  color: 'var(--text-secondary)',
+  lineHeight: 1.65,
+};
+
+const cardsCol = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  gap: '16px',
+};
+
+const cardStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  overflow: 'hidden',
+};
+
+const cardImageWrap = {
+  height: '160px',
+  overflow: 'hidden',
+};
+
+const cardImage = {
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+};
+
+const cardContent = {
+  padding: '20px',
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+};
+
+const iconBox = {
+  width: '32px',
+  height: '32px',
+  borderRadius: '6px',
+  backgroundColor: 'var(--accent-subtle)',
+  color: 'var(--accent)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: '12px',
+};
+
+const cardTitle = {
+  fontSize: '1.02rem',
+  marginBottom: '6px',
+  fontWeight: 600,
+};
+
+const cardDesc = {
+  fontSize: '0.82rem',
+  color: 'var(--text-secondary)',
+  lineHeight: 1.5,
 };

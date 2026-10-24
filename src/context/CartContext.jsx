@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getStoredPromoCodes } from '../data/promoCodes';
 
 const CartContext = createContext();
 
@@ -69,12 +70,31 @@ export const CartProvider = ({ children }) => {
 
   const applyPromo = (code) => {
     const clean = code.trim().toUpperCase();
-    if (clean === 'GRAND2026' || clean === 'MEBEL10') {
-      setPromoCode(clean);
-      setDiscountPercent(10);
-      return { success: true };
+    const storedPromos = getStoredPromoCodes();
+    const found = storedPromos.find((p) => p.code.toUpperCase() === clean);
+
+    if (!found || !found.isActive) {
+      return { success: false, message: "Promokod notoʻgʻri yoki faol emas" };
     }
-    return { success: false };
+
+    if (found.expiresAt) {
+      const today = new Date().toISOString().split('T')[0];
+      if (today > found.expiresAt) {
+        return { success: false, message: "Promokodning amal qilish muddati tugagan" };
+      }
+    }
+
+    if (found.minOrderAmount && subtotal < found.minOrderAmount) {
+      const formattedMin = new Intl.NumberFormat('uz-UZ').format(found.minOrderAmount) + " so'm";
+      return { 
+        success: false, 
+        message: `Ushbu promokod minimal ${formattedMin} xarid uchun amal qiladi` 
+      };
+    }
+
+    setPromoCode(clean);
+    setDiscountPercent(found.discountPercent);
+    return { success: true, discountPercent: found.discountPercent };
   };
 
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);

@@ -198,12 +198,33 @@ export const OrderProvider = ({ children }) => {
     setCustomInquiries((prev) => prev.filter((i) => i.id !== inquiryId));
   };
 
+  const createManualOrder = (orderData) => {
+    const newOrder = {
+      id: orderData.id || 'GM-' + Math.floor(100000 + Math.random() * 900000),
+      date: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      customer: {
+        fullName: orderData.customerName,
+        phone: orderData.customerPhone,
+        address: orderData.customerAddress || 'Showroom / Salon',
+        paymentMethod: orderData.paymentMethod || 'Naqd pul',
+        orderNotes: orderData.orderNotes || '',
+      },
+      items: orderData.items || [],
+      totalAmount: Number(orderData.totalAmount) || 0,
+      status: orderData.status || 'new',
+    };
+
+    setOrders((prev) => [newOrder, ...prev]);
+    return newOrder;
+  };
+
   return (
     <OrderContext.Provider
       value={{
         orders,
         customInquiries,
         addOrder,
+        createManualOrder,
         addCustomInquiry,
         updateOrderStatus,
         deleteOrder,

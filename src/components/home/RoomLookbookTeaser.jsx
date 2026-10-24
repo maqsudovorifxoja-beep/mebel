@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { ROOM_LOOKBOOKS, PRODUCTS } from '../../data/products';
-import { ArrowRight, Eye, Plus, Check } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 
 export const RoomLookbookTeaser = () => {
   const { lang, t } = useLanguage();
@@ -17,7 +17,7 @@ export const RoomLookbookTeaser = () => {
   };
 
   return (
-    <section className="section" style={{ backgroundColor: 'var(--bg-primary)' }}>
+    <section className="section" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="container">
         <div className="section-header">
           <div className="section-tag">
@@ -26,16 +26,7 @@ export const RoomLookbookTeaser = () => {
           <h2 className="section-title">{t.rooms.title}</h2>
           <p className="section-subtitle">{t.rooms.subtitle}</p>
 
-          {/* Room selectors */}
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: '12px',
-              marginTop: '24px',
-            }}
-          >
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginTop: '24px' }}>
             {ROOM_LOOKBOOKS.map((r, idx) => (
               <button
                 key={r.id}
@@ -51,26 +42,15 @@ export const RoomLookbookTeaser = () => {
           </div>
         </div>
 
-        {/* Interactive Room Canvas */}
-        <div
-          style={{
-            position: 'relative',
-            borderRadius: 'var(--radius-lg)',
-            overflow: 'hidden',
-            boxShadow: 'var(--shadow-lg)',
-            border: '1px solid var(--border-light)',
-            aspectRatio: '16/9',
-            maxHeight: '620px',
-            backgroundColor: 'var(--bg-secondary)',
-          }}
-        >
+        {/* Canvas */}
+        <div style={canvasStyle}>
           <img
             src={room.image}
             alt={room.title[lang] || room.title.uz}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
 
-          {/* Interactive Hotspot pins */}
+          {/* Hotspot pins */}
           {room.hotspots.map((spot, i) => (
             <div
               key={i}
@@ -84,86 +64,93 @@ export const RoomLookbookTeaser = () => {
             >
               <button
                 onClick={() => handleHotspotClick(spot.productId)}
-                style={{
-                  width: '38px',
-                  height: '38px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--surface-glass)',
-                  backdropFilter: 'blur(8px)',
-                  border: '2px solid var(--accent-gold)',
-                  boxShadow: '0 0 0 6px rgba(197, 155, 39, 0.3)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--accent-gold)',
-                  animation: 'pulseGlow 2s infinite',
-                }}
+                style={hotspotStyle}
                 title={spot.title}
                 aria-label={spot.title}
               >
-                <Plus size={18} />
+                <Plus size={16} />
               </button>
             </div>
           ))}
 
-          {/* Floating Product Popover Card when hotspot clicked */}
+          {/* Product popover */}
           {activeHotspotProduct && (
-            <div
-              className="luxury-card animate-fade-in"
-              style={{
-                position: 'absolute',
-                bottom: '24px',
-                right: '24px',
-                maxWidth: '340px',
-                width: 'calc(100% - 48px)',
-                zIndex: 20,
-                padding: '16px',
-                backgroundColor: 'var(--surface-glass)',
-                backdropFilter: 'blur(12px)',
-                display: 'flex',
-                gap: '14px',
-                alignItems: 'center',
-              }}
-            >
+            <div className="animate-fade-in" style={popoverStyle}>
               <img
                 src={activeHotspotProduct.images[0]}
                 alt={activeHotspotProduct.name[lang] || activeHotspotProduct.name.uz}
-                style={{
-                  width: '75px',
-                  height: '75px',
-                  borderRadius: 'var(--radius-sm)',
-                  objectFit: 'cover',
-                  flexShrink: 0,
-                }}
+                style={{ width: '68px', height: '68px', borderRadius: 'var(--r-sm)', objectFit: 'cover', flexShrink: 0 }}
               />
               <div style={{ flex: 1, overflow: 'hidden' }}>
-                <h4 style={{ fontSize: '0.98rem', fontWeight: 600, marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {activeHotspotProduct.name[lang] || activeHotspotProduct.name.uz}
                 </h4>
-                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--accent-gold)', marginBottom: '8px' }}>
+                <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>
                   {new Intl.NumberFormat('uz-UZ').format(activeHotspotProduct.price)} {t.catalog.currency}
                 </div>
                 <Link
                   to={`/product/${activeHotspotProduct.id}`}
                   className="btn btn-primary btn-sm"
-                  style={{ padding: '4px 10px', fontSize: '0.78rem' }}
+                  style={{ padding: '4px 10px', fontSize: '0.74rem' }}
                 >
                   <span>{t.rooms.viewFurniture}</span>
-                  <ArrowRight size={13} />
+                  <ArrowRight size={12} />
                 </Link>
               </div>
             </div>
           )}
         </div>
 
-        {/* Link to Full Lookbooks page */}
         <div style={{ textAlign: 'center', marginTop: '36px' }}>
           <Link to="/rooms" className="btn btn-outline btn-lg">
             <span>{t.rooms.exploreLookbook}</span>
-            <ArrowRight size={18} />
+            <ArrowRight size={17} />
           </Link>
         </div>
       </div>
     </section>
   );
+};
+
+const canvasStyle = {
+  position: 'relative',
+  borderRadius: 'var(--r-lg)',
+  overflow: 'hidden',
+  boxShadow: 'var(--shadow-md)',
+  border: '1px solid var(--border)',
+  aspectRatio: '16/9',
+  maxHeight: '580px',
+  backgroundColor: 'var(--bg-tertiary)',
+};
+
+const hotspotStyle = {
+  width: '34px',
+  height: '34px',
+  borderRadius: '50%',
+  backgroundColor: 'var(--surface-glass)',
+  backdropFilter: 'blur(6px)',
+  border: '2px solid var(--accent)',
+  boxShadow: '0 0 0 4px rgba(176, 141, 62, 0.2)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'var(--accent)',
+  transition: 'transform 0.2s ease',
+};
+
+const popoverStyle = {
+  position: 'absolute',
+  bottom: '20px',
+  right: '20px',
+  maxWidth: '320px',
+  width: 'calc(100% - 40px)',
+  zIndex: 20,
+  padding: '14px',
+  backgroundColor: 'var(--surface)',
+  border: '1px solid var(--border)',
+  borderRadius: 'var(--r-md)',
+  boxShadow: 'var(--shadow-lg)',
+  display: 'flex',
+  gap: '12px',
+  alignItems: 'center',
 };

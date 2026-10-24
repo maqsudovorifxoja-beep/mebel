@@ -82,8 +82,12 @@ export const ContactPage = () => {
             {showrooms.map((sh, idx) => (
               <div
                 key={idx}
-                className="luxury-card"
-                style={{ padding: '28px', backgroundColor: 'var(--surface)' }}
+                className="luxury-card card-hover-lift animate-fade-in-up"
+                style={{
+                  padding: '28px',
+                  backgroundColor: 'var(--surface)',
+                  animationDelay: `${idx * 0.1}s`,
+                }}
               >
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '16px', color: 'var(--accent-gold)' }}>
                   {sh.city[lang] || sh.city.uz}

@@ -13,7 +13,8 @@ import {
   Sliders, 
   ShieldAlert,
   X,
-  LogOut
+  LogOut,
+  Ticket
 } from 'lucide-react';
 
 export const AdminSidebar = ({ activeTab, setActiveTab, isMobileOpen, setIsMobileOpen }) => {
@@ -47,6 +48,11 @@ export const AdminSidebar = ({ activeTab, setActiveTab, isMobileOpen, setIsMobil
       icon: Ruler,
       badge: newInquiriesCount > 0 ? newInquiriesCount : null,
       badgeColor: '#24A1DE',
+    },
+    {
+      id: 'promos',
+      label: 'Promokodlar',
+      icon: Ticket,
     },
     {
       id: 'telegram',

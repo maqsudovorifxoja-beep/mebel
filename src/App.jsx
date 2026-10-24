@@ -13,6 +13,7 @@ import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { TelegramSettingsModal } from './components/layout/TelegramSettingsModal';
 import { ToastContainer } from './components/common/ToastContainer';
+import { AIAssistantWidget } from './components/ai/AIAssistantWidget';
 
 import { HomePage } from './pages/HomePage';
 import { CatalogPage } from './pages/CatalogPage';
@@ -54,8 +55,8 @@ const AppContent = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar />
-      <div style={{ flex: 1 }}>
-        <Routes>
+      <main key={location.pathname} className="page-transition" style={{ flex: 1 }}>
+        <Routes location={location}>
           <Route path="/" element={<HomePage />} />
           <Route path="/catalog" element={<CatalogPage />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
@@ -67,7 +68,7 @@ const AppContent = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      </div>
+      </main>
       <Footer />
     </div>
   );
@@ -86,9 +87,10 @@ export function App() {
                     <BrowserRouter>
                       <ScrollToTop />
                       <AppContent />
-                      {/* Global Modals & Notifications */}
+                      {/* Global Modals, AI Assistant & Notifications */}
                       <TelegramSettingsModal />
                       <ToastContainer />
+                      <AIAssistantWidget />
                     </BrowserRouter>
                   </TelegramProvider>
                 </WishlistProvider>

@@ -9,45 +9,51 @@ export const CategoryGrid = () => {
   const categories = [
     {
       id: 'sofa',
-      title: { uz: 'Yumshoq Mebellar & Divanlar', ru: 'Мягкая Мебель и Диваны', en: 'Sofas & Luxury Lounges' },
-      desc: { uz: 'Italiya baxmali va qulay ergonomika', ru: 'Итальянский бархат и эргономика', en: 'Italian velvet & supreme comfort' },
+      title: { uz: 'Yumshoq Mebellar', ru: 'Мягкая Мебель', en: 'Sofas & Lounges' },
+      desc: { uz: 'Italiya baxmali, qulay ergonomika', ru: 'Итальянский бархат и эргономика', en: 'Italian velvet & supreme comfort' },
       image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80',
-      count: '18+ model',
+      count: '18+',
+      span: 'large',
     },
     {
       id: 'bedroom',
-      title: { uz: 'Yotoqxona & Ortopedik Karavotlar', ru: 'Спальни и Кровати', en: 'Bedrooms & Master Beds' },
-      desc: { uz: 'Sogʻlom uyqu va hashamatli dizayn', ru: 'Глубокий сон и эстетика', en: 'Restorative rest & timeless craft' },
+      title: { uz: 'Yotoqxona', ru: 'Спальня', en: 'Bedrooms' },
+      desc: { uz: 'Sogʻlom uyqu va hashamat', ru: 'Сон и эстетика', en: 'Restorative rest & craft' },
       image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80',
-      count: '14+ model',
+      count: '14+',
+      span: 'normal',
     },
     {
       id: 'kitchen',
-      title: { uz: 'Oshxona & Marmar Stollari', ru: 'Кухни и Обеденные Столы', en: 'Kitchen & Marble Dining' },
-      desc: { uz: 'Calacatta marmari va kvars orollari', ru: 'Мрамор Calacatta и кварц', en: 'Calacatta marble and quartz' },
+      title: { uz: 'Oshxona', ru: 'Кухня', en: 'Kitchen & Dining' },
+      desc: { uz: 'Calacatta marmari, kvars', ru: 'Мрамор Calacatta и кварц', en: 'Calacatta marble & quartz' },
       image: 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?auto=format&fit=crop&w=800&q=80',
-      count: '12+ model',
+      count: '12+',
+      span: 'normal',
     },
     {
       id: 'living',
-      title: { uz: 'Mehmonxona & TV Konsollari', ru: 'Гостиные и ТВ-тумбы', en: 'Living Room Suites & TV Units' },
-      desc: { uz: 'Travertin stollar va rifleniy tumba', ru: 'Травертин и рифленые фасады', en: 'Travertine stone & fluted wood' },
+      title: { uz: 'Mehmonxona', ru: 'Гостиная', en: 'Living Room' },
+      desc: { uz: 'Travertin, rifleniy konsol', ru: 'Травертин и рифленые фасады', en: 'Travertine & fluted wood' },
       image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
-      count: '16+ model',
+      count: '16+',
+      span: 'normal',
     },
     {
       id: 'office',
-      title: { uz: 'Ofis & Rahbar Stol-Kreslolari', ru: 'Кабинеты и Столы Руководителя', en: 'Executive Office Desks' },
-      desc: { uz: 'Tabiiy yongʻoq shpon va qulaylik', ru: 'Американский орех и стиль', en: 'American walnut & prestige' },
+      title: { uz: 'Ofis & Kabinet', ru: 'Кабинет', en: 'Executive Office' },
+      desc: { uz: 'Tabiiy yongʻoq, qulaylik', ru: 'Американский орех', en: 'American walnut & prestige' },
       image: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=800&q=80',
-      count: '9+ model',
+      count: '9+',
+      span: 'normal',
     },
     {
       id: 'storage',
-      title: { uz: 'Shkaflar & Shisha Garderoblar', ru: 'Гардеробные и Шкафы', en: 'Walk-In Closets & Storage' },
-      desc: { uz: 'Bronza shisha va LED yoritgichlar', ru: 'Бронзовое стекло и сенсорный свет', en: 'Bronze tinted glass & sensor lights' },
+      title: { uz: 'Shkaflar', ru: 'Гардеробные', en: 'Walk-In Closets' },
+      desc: { uz: 'Bronza shisha, LED chiroq', ru: 'Бронзовое стекло и LED', en: 'Bronze glass & sensor lights' },
       image: 'https://images.unsplash.com/photo-1558997519-83ea9252def8?auto=format&fit=crop&w=800&q=80',
-      count: '11+ model',
+      count: '11+',
+      span: 'large',
     },
   ];
 
@@ -60,114 +66,158 @@ export const CategoryGrid = () => {
           </div>
           <h2 className="section-title">
             {lang === 'uz'
-              ? 'Har Bir Xona Uchun Mukammal Mebel'
+              ? 'Har Bir Xona Uchun Mukammal Yechim'
               : lang === 'ru'
-              ? 'Идеальная Мебель Для Каждого Пространства'
-              : 'Curated Collections for Every Living Space'}
+              ? 'Мебель Для Каждого Пространства'
+              : 'Curated for Every Living Space'}
           </h2>
           <p className="section-subtitle">
             {lang === 'uz'
               ? 'Mehmonxonadan tortib shaxsiy kabinetgacha — har bir burchakni nafosat bilan toʻldiramiz.'
               : lang === 'ru'
-              ? 'От уютной гостиной до представительского кабинета — бескомпромиссная эстетика.'
-              : 'From intimate private bedrooms to open-concept living suites, discover handcrafted distinction.'}
+              ? 'От уютной гостиной до представительского кабинета.'
+              : 'From private bedrooms to open-concept living suites.'}
           </p>
         </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '24px',
-          }}
-        >
-          {categories.map((cat) => (
+        <div style={gridStyle}>
+          {categories.map((cat, i) => (
             <Link
               key={cat.id}
               to={`/catalog?category=${cat.id}`}
-              className="luxury-card"
               style={{
-                display: 'block',
-                position: 'relative',
-                overflow: 'hidden',
-                borderRadius: 'var(--radius-md)',
-                height: '340px',
+                ...cardStyle,
+                gridColumn: cat.span === 'large' ? 'span 2' : 'span 1',
+                height: cat.span === 'large' ? '380px' : '320px',
+                animationDelay: `${i * 80}ms`,
               }}
+              className="category-card animate-fade-in-up"
             >
               <img
                 src={cat.image}
                 alt={cat.title[lang] || cat.title.uz}
                 loading="lazy"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.08)')}
-                onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1.0)')}
+                style={imageStyle}
               />
-
-              {/* Gradient Overlay */}
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.75) 100%)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-end',
-                  padding: '28px',
-                  color: '#ffffff',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                  <span
-                    style={{
-                      fontSize: '0.78rem',
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
-                      color: 'var(--accent-gold)',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {cat.count}
+              <div style={overlayStyle} />
+              <div style={contentStyle}>
+                <div style={topRow}>
+                  <span style={countStyle}>
+                    {cat.count} {lang === 'uz' ? 'model' : lang === 'ru' ? 'моделей' : 'models'}
                   </span>
-                  <div
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                      backdropFilter: 'blur(4px)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <ArrowUpRight size={16} />
+                  <div style={arrowCircle}>
+                    <ArrowUpRight size={15} />
                   </div>
                 </div>
-
-                <h3
-                  style={{
-                    fontSize: '1.4rem',
-                    color: '#ffffff',
-                    marginBottom: '6px',
-                    fontFamily: 'var(--font-serif)',
-                  }}
-                >
-                  {cat.title[lang] || cat.title.uz}
-                </h3>
-
-                <p style={{ fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.85)' }}>
-                  {cat.desc[lang] || cat.desc.uz}
-                </p>
+                <div>
+                  <h3 style={titleStyle}>{cat.title[lang] || cat.title.uz}</h3>
+                  <p style={descStyle}>{cat.desc[lang] || cat.desc.uz}</p>
+                </div>
               </div>
+
+              <style>{`
+                .category-card img {
+                  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                }
+                .category-card:hover img {
+                  transform: scale(1.06) !important;
+                }
+                .category-card:hover .arrow-circle {
+                  background: var(--accent) !important;
+                  color: #0e100f !important;
+                }
+              `}</style>
             </Link>
           ))}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .category-card {
+            grid-column: span 1 !important;
+            height: 260px !important;
+          }
+        }
+      `}</style>
     </section>
   );
+};
+
+const gridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(3, 1fr)',
+  gap: '16px',
+};
+
+const cardStyle = {
+  position: 'relative',
+  overflow: 'hidden',
+  borderRadius: 'var(--r-md)',
+  display: 'block',
+  textDecoration: 'none',
+};
+
+const imageStyle = {
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  position: 'absolute',
+  inset: 0,
+};
+
+const overlayStyle = {
+  position: 'absolute',
+  inset: 0,
+  background: 'linear-gradient(to top, rgba(14, 16, 15, 0.78) 0%, rgba(14, 16, 15, 0.15) 60%, rgba(14, 16, 15, 0.05) 100%)',
+};
+
+const contentStyle = {
+  position: 'absolute',
+  inset: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  padding: '20px',
+  color: '#ffffff',
+};
+
+const topRow = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+};
+
+const countStyle = {
+  fontSize: '0.72rem',
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  color: 'rgba(255, 255, 255, 0.65)',
+  fontWeight: 500,
+};
+
+const arrowCircle = {
+  width: '30px',
+  height: '30px',
+  borderRadius: '50%',
+  backgroundColor: 'rgba(255, 255, 255, 0.12)',
+  backdropFilter: 'blur(4px)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.25s ease',
+};
+
+const titleStyle = {
+  fontSize: '1.25rem',
+  color: '#ffffff',
+  marginBottom: '4px',
+  fontFamily: 'var(--font-display)',
+  fontWeight: 600,
+};
+
+const descStyle = {
+  fontSize: '0.82rem',
+  color: 'rgba(255, 255, 255, 0.7)',
+  lineHeight: 1.4,
 };

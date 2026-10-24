@@ -6,8 +6,8 @@ const TRANSLATIONS = {
     brandTagline: 'Italiya Nafosati & Premium Sifat',
     nav: {
       home: 'Bosh sahifa',
-      catalog: 'Mebellar katalogi',
-      rooms: 'Interyer kolleksiyasi',
+      catalog: 'Katalog',
+      rooms: 'Lookbook',
       customOrder: 'Maxsus buyurtma',
       about: 'Biz haqimizda',
       contact: 'Aloqa & Showroom',
@@ -193,8 +193,8 @@ const TRANSLATIONS = {
     brandTagline: 'Итальянская Элегантность и Премиум Качество',
     nav: {
       home: 'Главная',
-      catalog: 'Каталог мебели',
-      rooms: 'Коллекции интерьеров',
+      catalog: 'Каталог',
+      rooms: 'Lookbook',
       customOrder: 'Индивидуальный заказ',
       about: 'О компании',
       contact: 'Контакты & Шоурум',
@@ -380,8 +380,8 @@ const TRANSLATIONS = {
     brandTagline: 'Italian Elegance & Bespoke Craftsmanship',
     nav: {
       home: 'Home',
-      catalog: 'Furniture Catalog',
-      rooms: 'Room Lookbooks',
+      catalog: 'Catalog',
+      rooms: 'Lookbook',
       customOrder: 'Custom Bespoke',
       about: 'About Us',
       contact: 'Contact & Showroom',

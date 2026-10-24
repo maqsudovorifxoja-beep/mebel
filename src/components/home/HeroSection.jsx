@@ -1,226 +1,224 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { useTelegram } from '../../context/TelegramContext';
-import { ArrowRight, Sparkles, Send, ShieldCheck, Award, Ruler } from 'lucide-react';
+import { ArrowRight, Ruler, Play } from 'lucide-react';
 
 export const HeroSection = () => {
   const { t } = useLanguage();
-  const { openSettingsModal } = useTelegram();
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <section
-      style={{
-        position: 'relative',
-        minHeight: '85vh',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '60px 0 80px',
-        overflow: 'hidden',
-        background: 'linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%)',
-      }}
-    >
-      {/* Subtle background glow */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '-10%',
-          right: '-5%',
-          width: '500px',
-          height: '500px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, var(--accent-gold-glow) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
+    <section style={styles.hero}>
+      {/* Full-bleed hero image */}
+      <div style={styles.imageContainer}>
+        <img
+          src="/hero-main.jpg"
+          alt="Grand Mebel — Luxury Italian Interior"
+          style={{
+            ...styles.heroImage,
+            transform: loaded ? 'scale(1)' : 'scale(1.06)',
+            opacity: loaded ? 1 : 0,
+          }}
+          onLoad={() => setLoaded(true)}
+        />
+        <div style={styles.imageOverlay} />
+      </div>
 
-      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+      {/* Content layer */}
+      <div className="container" style={styles.contentWrap}>
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '48px',
-            alignItems: 'center',
+            ...styles.content,
+            opacity: loaded ? 1 : 0,
+            transform: loaded ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'opacity 0.7s ease 0.3s, transform 0.7s ease 0.3s',
           }}
         >
-          {/* Left Text Column */}
-          <div style={{ maxWidth: '640px' }}>
-            <div className="section-tag" style={{ justifyContent: 'flex-start' }}>
-              <Sparkles size={14} />
-              <span>{t.hero.tag}</span>
-            </div>
-
-            <h1
-              style={{
-                fontSize: 'clamp(2.3rem, 5vw, 3.6rem)',
-                fontFamily: 'var(--font-serif)',
-                fontWeight: 700,
-                color: 'var(--text-primary)',
-                lineHeight: 1.18,
-                marginBottom: '20px',
-              }}
-            >
-              {t.hero.title}
-            </h1>
-
-            <p
-              style={{
-                fontSize: '1.12rem',
-                color: 'var(--text-secondary)',
-                lineHeight: 1.65,
-                marginBottom: '36px',
-              }}
-            >
-              {t.hero.subtitle}
-            </p>
-
-            {/* CTA Buttons */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '48px' }}>
-              <Link to="/catalog" className="btn btn-primary btn-lg">
-                <span>{t.hero.exploreCatalog}</span>
-                <ArrowRight size={18} />
-              </Link>
-
-              <Link to="/custom-order" className="btn btn-secondary btn-lg">
-                <Ruler size={18} color="var(--accent-gold)" />
-                <span>{t.hero.customOrderBtn}</span>
-              </Link>
-
-              <a
-                href="https://t.me"
-                target="_blank"
-                rel="noreferrer"
-                className="btn btn-telegram btn-lg"
-              >
-                <Send size={18} />
-                <span>{t.hero.consultTelegram}</span>
-              </a>
-            </div>
-
-            {/* Quick Metrics Bar */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '16px',
-                paddingTop: '24px',
-                borderTop: '1px solid var(--border-light)',
-              }}
-            >
-              <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--accent-gold)', fontFamily: 'var(--font-serif)' }}>
-                  12+
-                </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  {t.hero.stat1}
-                </div>
-              </div>
-
-              <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--accent-gold)', fontFamily: 'var(--font-serif)' }}>
-                  3 500+
-                </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  {t.hero.stat2}
-                </div>
-              </div>
-
-              <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--accent-gold)', fontFamily: 'var(--font-serif)' }}>
-                  5 Yil
-                </div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                  {t.hero.stat3}
-                </div>
-              </div>
-            </div>
+          <div style={styles.eyebrow}>
+            <span style={styles.eyebrowLine} />
+            <span>{t.hero.tag}</span>
           </div>
 
-          {/* Right Visual Composition */}
-          <div style={{ position: 'relative' }}>
-            <div
-              style={{
-                borderRadius: 'var(--radius-lg)',
-                overflow: 'hidden',
-                boxShadow: 'var(--shadow-lg)',
-                border: '1px solid var(--border-light)',
-                aspectRatio: '4/3',
-              }}
-            >
-              <img
-                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=85"
-                alt="Grand Mebel Luxury Living Room"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </div>
+          <h1 style={styles.heading}>
+            {t.hero.title}
+          </h1>
 
-            {/* Floating Luxury Detail Badge */}
-            <div
-              className="luxury-card pulse-glow"
-              style={{
-                position: 'absolute',
-                bottom: '-24px',
-                left: '-20px',
-                padding: '16px 20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '14px',
-                maxWidth: '280px',
-                borderRadius: 'var(--radius-md)',
-                backgroundColor: 'var(--surface-glass)',
-                backdropFilter: 'blur(10px)',
-              }}
-            >
-              <div
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--accent-gold-light)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--accent-gold)',
-                  flexShrink: 0,
-                }}
-              >
-                <Award size={22} />
-              </div>
-              <div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 700 }}>
-                  Premium Italiya Baxmali
-                </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                  Suv va qahva dogʻlariga chidamli
-                </div>
-              </div>
-            </div>
+          <p style={styles.subheading}>
+            {t.hero.subtitle}
+          </p>
 
-            {/* Floating Bot Badge */}
-            <div
-              className="luxury-card"
-              style={{
-                position: 'absolute',
-                top: '20px',
-                right: '-16px',
-                padding: '10px 16px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                borderRadius: 'var(--radius-full)',
-                backgroundColor: '#24A1DE',
-                color: '#fff',
-                fontSize: '0.82rem',
-                fontWeight: 600,
-                boxShadow: '0 8px 24px rgba(36, 161, 222, 0.4)',
-              }}
-            >
-              <Send size={15} />
-              <span>Telegram Bot 24/7 Ulanish</span>
+          <div style={styles.actions}>
+            <Link to="/catalog" className="btn btn-primary btn-lg">
+              <span>{t.hero.exploreCatalog}</span>
+              <ArrowRight size={17} />
+            </Link>
+
+            <Link to="/custom-order" className="btn btn-lg" style={styles.btnGhost}>
+              <Ruler size={17} />
+              <span>{t.hero.customOrderBtn}</span>
+            </Link>
+          </div>
+
+          {/* Stat strip */}
+          <div style={styles.stats}>
+            <div style={styles.statItem}>
+              <span style={styles.statValue}>12+</span>
+              <span style={styles.statLabel}>{t.hero.stat1}</span>
+            </div>
+            <div style={styles.statDivider} />
+            <div style={styles.statItem}>
+              <span style={styles.statValue}>3 500+</span>
+              <span style={styles.statLabel}>{t.hero.stat2}</span>
+            </div>
+            <div style={styles.statDivider} />
+            <div style={styles.statItem}>
+              <span style={styles.statValue}>5 Yil</span>
+              <span style={styles.statLabel}>{t.hero.stat3}</span>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <div style={styles.scrollHint}>
+        <div style={styles.scrollDot} />
+      </div>
     </section>
   );
+};
+
+const styles = {
+  hero: {
+    position: 'relative',
+    height: '100vh',
+    minHeight: '640px',
+    maxHeight: '960px',
+    display: 'flex',
+    alignItems: 'flex-end',
+    overflow: 'hidden',
+  },
+  imageContainer: {
+    position: 'absolute',
+    inset: 0,
+  },
+  heroImage: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    objectPosition: 'center 35%',
+    transition: 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease',
+  },
+  imageOverlay: {
+    position: 'absolute',
+    inset: 0,
+    background: 'linear-gradient(to top, rgba(14, 16, 15, 0.88) 0%, rgba(14, 16, 15, 0.45) 40%, rgba(14, 16, 15, 0.1) 100%)',
+  },
+  contentWrap: {
+    position: 'relative',
+    zIndex: 2,
+    paddingBottom: '72px',
+    width: '100%',
+  },
+  content: {
+    maxWidth: '640px',
+  },
+  eyebrow: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '12px',
+    fontSize: '0.76rem',
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase',
+    fontWeight: '600',
+    color: '#c9a54a',
+    marginBottom: '20px',
+  },
+  eyebrowLine: {
+    display: 'inline-block',
+    width: '32px',
+    height: '1.5px',
+    background: '#c9a54a',
+  },
+  heading: {
+    fontSize: 'clamp(2.2rem, 5vw, 3.5rem)',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontWeight: 700,
+    color: '#ffffff',
+    lineHeight: 1.12,
+    marginBottom: '20px',
+    letterSpacing: '-0.02em',
+  },
+  subheading: {
+    fontSize: '1.08rem',
+    color: 'rgba(255, 255, 255, 0.72)',
+    lineHeight: 1.65,
+    marginBottom: '32px',
+    maxWidth: '520px',
+  },
+  actions: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '12px',
+    marginBottom: '44px',
+  },
+  btnGhost: {
+    background: 'rgba(255, 255, 255, 0.08)',
+    color: '#ffffff',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    backdropFilter: 'blur(6px)',
+  },
+  stats: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '24px',
+    paddingTop: '24px',
+    borderTop: '1px solid rgba(255, 255, 255, 0.12)',
+  },
+  statItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+  },
+  statValue: {
+    fontSize: '1.3rem',
+    fontWeight: 700,
+    color: '#c9a54a',
+    fontFamily: "'Playfair Display', Georgia, serif",
+  },
+  statLabel: {
+    fontSize: '0.74rem',
+    color: 'rgba(255, 255, 255, 0.55)',
+    letterSpacing: '0.04em',
+  },
+  statDivider: {
+    width: '1px',
+    height: '32px',
+    background: 'rgba(255, 255, 255, 0.12)',
+  },
+  scrollHint: {
+    position: 'absolute',
+    bottom: '28px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    zIndex: 3,
+    width: '20px',
+    height: '32px',
+    borderRadius: '10px',
+    border: '1.5px solid rgba(255, 255, 255, 0.25)',
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: '6px',
+  },
+  scrollDot: {
+    width: '3px',
+    height: '8px',
+    borderRadius: '3px',
+    background: 'rgba(255, 255, 255, 0.5)',
+    animation: 'fadeIn 1.5s ease infinite',
+  },
 };

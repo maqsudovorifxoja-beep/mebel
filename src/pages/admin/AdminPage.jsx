@@ -9,6 +9,7 @@ import { ProductsView } from './ProductsView';
 import { OrdersView } from './OrdersView';
 import { CustomInquiriesView } from './CustomInquiriesView';
 import { TelegramBotView } from './TelegramBotView';
+import { PromoCodesView } from './PromoCodesView';
 import { 
   Menu, 
   Sun, 
@@ -82,6 +83,7 @@ export const AdminPage = () => {
                 {activeTab === 'products' && 'Mebellar Katalogi Boshqaruvi'}
                 {activeTab === 'orders' && 'Buyurtmalar Roʻyxati'}
                 {activeTab === 'inquiries' && 'Maxsus Oʻlchamli Buyurtmalar'}
+                {activeTab === 'promos' && 'Promokodlar Boshqaruvi'}
                 {activeTab === 'telegram' && 'Telegram Bot Sozlamalari'}
               </span>
             </div>
@@ -178,6 +180,7 @@ export const AdminPage = () => {
           {activeTab === 'products' && <ProductsView />}
           {activeTab === 'orders' && <OrdersView />}
           {activeTab === 'inquiries' && <CustomInquiriesView />}
+          {activeTab === 'promos' && <PromoCodesView />}
           {activeTab === 'telegram' && <TelegramBotView />}
         </main>
       </div>

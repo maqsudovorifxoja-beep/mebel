@@ -13,7 +13,10 @@ import {
   User, 
   Phone, 
   MapPin,
-  ArrowRight
+  ArrowRight,
+  Upload,
+  Image as ImageIcon,
+  X
 } from 'lucide-react';
 
 export const CustomOrderPage = () => {
@@ -32,6 +35,29 @@ export const CustomOrderPage = () => {
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedQuote, setSubmittedQuote] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
+
+  const handlePhotoSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        addToast('Rasm hajmi 10 MB dan oshmasligi kerak', 'warning');
+        return;
+      }
+      setPhotoFile(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPhotoPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    setPhotoFile(null);
+    setPhotoPreview(null);
+  };
 
   const furnitureTypes = [
     { id: 'kitchen', label: t.customOrder.typeKitchen, basePrice: 28000000 },
@@ -82,12 +108,14 @@ export const CustomOrderPage = () => {
       phone: customerPhone,
       address: customerAddress,
       furnitureType: chosenType,
+      furnitureTypeId: furnitureType,
       length,
       depth,
       height,
       material: chosenMat,
       budget: new Intl.NumberFormat('uz-UZ').format(estimatedTotal) + " so'm",
       notes,
+      photo: photoFile || photoPreview || null,
     };
 
     const res = await submitCustomInquiry(inquiryPayload);
@@ -375,6 +403,97 @@ export const CustomOrderPage = () => {
                       onChange={(e) => setNotes(e.target.value)}
                       className="form-textarea"
                     />
+                  </div>
+
+                  {/* Photo / Sketch Attachment */}
+                  <div className="form-group">
+                    <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span>{lang === 'uz' ? 'Eskiz yoki xona rasmi (ixtiyoriy)' : lang === 'ru' ? 'Фото или эскиз (необязательно)' : 'Photo / Sketch (Optional)'}</span>
+                      <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)' }}>JPG, PNG (max 10MB)</span>
+                    </label>
+
+                    {photoPreview ? (
+                      <div
+                        style={{
+                          position: 'relative',
+                          borderRadius: 'var(--r-md)',
+                          overflow: 'hidden',
+                          border: '1px solid var(--border)',
+                          backgroundColor: 'var(--bg-secondary)',
+                          aspectRatio: '16/9',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <img
+                          src={photoPreview}
+                          alt="Custom furniture sketch"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                        <button
+                          type="button"
+                          onClick={handleRemovePhoto}
+                          className="btn-icon"
+                          style={{
+                            position: 'absolute',
+                            top: '8px',
+                            right: '8px',
+                            backgroundColor: 'rgba(0, 0, 0, 0.65)',
+                            color: '#ffffff',
+                            width: '32px',
+                            height: '32px',
+                          }}
+                          title={lang === 'uz' ? "Rasmni o'chirish" : 'Удалить фото'}
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    ) : (
+                      <label
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px',
+                          padding: '24px 16px',
+                          border: '2px dashed var(--border)',
+                          borderRadius: 'var(--r-md)',
+                          backgroundColor: 'var(--bg-secondary)',
+                          cursor: 'pointer',
+                          transition: 'border-color var(--t-fast)',
+                          textAlign: 'center',
+                        }}
+                      >
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handlePhotoSelect}
+                          style={{ display: 'none' }}
+                        />
+                        <div
+                          style={{
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '50%',
+                            backgroundColor: 'var(--accent-subtle)',
+                            color: 'var(--accent)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <Upload size={18} />
+                        </div>
+                        <span style={{ fontSize: '0.88rem', fontWeight: 500, color: 'var(--text-primary)' }}>
+                          {lang === 'uz' ? 'Rasm yuklash yoki suratga olish' : lang === 'ru' ? 'Загрузить фото или эскиз' : 'Upload photo or sketch'}
+                        </span>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                          {lang === 'uz' ? 'Buyurtma bilan birga Telegram botga yuboriladi' : 'Будет отправлено в Telegram бот'}
+                        </span>
+                      </label>
+                    )}
                   </div>
 
                   <button

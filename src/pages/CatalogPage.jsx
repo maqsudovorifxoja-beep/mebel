@@ -311,12 +311,17 @@ export const CatalogPage = () => {
               gap: '24px',
             }}
           >
-            {filteredProducts.map((product) => (
-              <ProductCard
+            {filteredProducts.map((product, idx) => (
+              <div
                 key={product.id}
-                product={product}
-                onQuickView={(p) => setQuickViewProduct(p)}
-              />
+                className="animate-fade-in-up"
+                style={{ animationDelay: `${Math.min(idx * 0.05, 0.35)}s` }}
+              >
+                <ProductCard
+                  product={product}
+                  onQuickView={(p) => setQuickViewProduct(p)}
+                />
+              </div>
             ))}
           </div>
         ) : (

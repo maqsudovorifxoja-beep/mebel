@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { useTelegram } from '../../context/TelegramContext';
-import { 
-  Sun, 
-  Moon, 
-  ShoppingBag, 
-  Heart, 
-  Send, 
-  Menu, 
-  X, 
-  Globe, 
+import {
+  Sun,
+  Moon,
+  ShoppingBag,
+  Heart,
+  Send,
+  Menu,
+  X,
+  Globe,
   ChevronDown,
-  Sparkles,
   PhoneCall,
   Sliders,
-  ShieldCheck
 } from 'lucide-react';
 
 export const Navbar = () => {
@@ -31,21 +29,31 @@ export const Navbar = () => {
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const langRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setIsScrolled(window.scrollY > 30);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close mobile menu on route change
+  // Close on route change
   useEffect(() => {
     setMobileMenuOpen(false);
-    setLangDropdownOpen(false);
+    setLangOpen(false);
   }, [location.pathname]);
+
+  // Close lang dropdown on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (langRef.current && !langRef.current.contains(e.target)) {
+        setLangOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const navLinks = [
     { to: '/', label: t.nav.home },
@@ -57,46 +65,64 @@ export const Navbar = () => {
   ];
 
   const languages = [
-    { code: 'uz', label: 'Oʻzbekcha', short: 'UZ' },
+    { code: 'uz', label: "Oʻzbekcha", short: 'UZ' },
     { code: 'ru', label: 'Русский', short: 'RU' },
     { code: 'en', label: 'English', short: 'EN' },
   ];
 
+  const headerStyle = {
+    position: 'sticky',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 900,
+    height: 'var(--header-height)',
+    backgroundColor: isScrolled ? 'var(--surface-glass)' : 'transparent',
+    backdropFilter: isScrolled ? 'blur(16px) saturate(180%)' : 'none',
+    WebkitBackdropFilter: isScrolled ? 'blur(16px) saturate(180%)' : 'none',
+    borderBottom: isScrolled ? '1px solid var(--border)' : '1px solid transparent',
+    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+    display: 'flex',
+    alignItems: 'center',
+  };
+
   return (
     <>
-      <header
-        style={{
-          position: 'sticky',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 900,
-          height: 'var(--header-height)',
-          backgroundColor: isScrolled ? 'var(--surface-glass)' : 'transparent',
-          backdropFilter: isScrolled ? 'blur(12px)' : 'none',
-          borderBottom: isScrolled ? '1px solid var(--border-light)' : '1px solid transparent',
-          transition: 'all var(--transition-normal)',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <div className="container" style={{ maxWidth: '1440px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
-          {/* Brand Logo */}
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
+      <header style={headerStyle}>
+        <div
+          className="container"
+          style={{
+            maxWidth: '1440px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+          }}
+        >
+          {/* Logo */}
+          <Link
+            to="/"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              textDecoration: 'none',
+              flexShrink: 0,
+            }}
+          >
             <div
               style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, var(--accent-gold), #8f6d14)',
+                width: '36px',
+                height: '36px',
+                borderRadius: 'var(--r-sm)',
+                background: 'var(--accent)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#0d0f12',
+                color: '#0e100f',
                 fontWeight: 800,
-                fontSize: '1.2rem',
-                fontFamily: 'var(--font-serif)',
-                boxShadow: 'var(--shadow-gold)',
+                fontSize: '1.1rem',
+                fontFamily: 'var(--font-display)',
               }}
             >
               G
@@ -104,8 +130,8 @@ export const Navbar = () => {
             <div>
               <span
                 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: '1.45rem',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '1.3rem',
                   fontWeight: 700,
                   letterSpacing: '0.04em',
                   color: 'var(--text-primary)',
@@ -117,34 +143,46 @@ export const Navbar = () => {
               </span>
               <span
                 style={{
-                  fontSize: '0.68rem',
-                  letterSpacing: '0.14em',
+                  fontSize: '0.62rem',
+                  letterSpacing: '0.16em',
                   textTransform: 'uppercase',
-                  color: 'var(--accent-gold)',
-                  fontWeight: 600,
+                  color: 'var(--text-muted)',
+                  fontWeight: 500,
                   display: 'block',
                 }}
               >
-                Atelier 2026
+                Atelier · Toshkent
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav style={{ display: 'none', gap: 'clamp(14px, 1.6vw, 24px)', alignItems: 'center', whiteSpace: 'nowrap' }} className="desktop-nav">
+          {/* Desktop Nav */}
+          <nav
+            className="desktop-nav"
+            style={{
+              display: 'none',
+              gap: 'clamp(12px, 1.6vw, 24px)',
+              alignItems: 'center',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+            }}
+          >
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}
+                end={link.to === '/'}
                 style={({ isActive }) => ({
-                  color: isActive ? 'var(--accent-gold)' : 'var(--text-primary)',
+                  color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
                   fontWeight: isActive ? 600 : 500,
-                  fontSize: '0.92rem',
+                  fontSize: '0.88rem',
                   position: 'relative',
-                  padding: '6px 0',
+                  padding: '6px 2px',
                   whiteSpace: 'nowrap',
-                  flexShrink: 0,
-                  transition: 'color var(--transition-fast)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  lineHeight: 1,
+                  transition: 'color var(--t-fast)',
                 })}
               >
                 {link.label}
@@ -152,44 +190,43 @@ export const Navbar = () => {
             ))}
           </nav>
 
-          {/* Action Icons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
-            {/* Language Switcher */}
-            <div style={{ position: 'relative' }}>
+          {/* Actions */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+            {/* Language */}
+            <div ref={langRef} style={{ position: 'relative' }}>
               <button
-                onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                onClick={() => setLangOpen(!langOpen)}
+                className="btn-icon"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '6px 10px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--border-light)',
-                  background: 'var(--surface)',
-                  fontSize: '0.85rem',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: 'var(--r-sm)',
+                  fontSize: '0.78rem',
                   fontWeight: 600,
+                  gap: '4px',
+                  display: 'flex',
+                  padding: 0,
                 }}
                 aria-label="Language selector"
               >
-                <Globe size={15} color="var(--accent-gold)" />
-                <span>{lang.toUpperCase()}</span>
-                <ChevronDown size={14} />
+                <Globe size={14} color="var(--accent)" />
+                <span style={{ fontSize: '0.72rem' }}>{lang.toUpperCase()}</span>
               </button>
 
-              {langDropdownOpen && (
+              {langOpen && (
                 <div
                   style={{
                     position: 'absolute',
-                    top: '100%',
+                    top: 'calc(100% + 6px)',
                     right: 0,
-                    marginTop: '8px',
                     background: 'var(--surface)',
-                    border: '1px solid var(--border-light)',
-                    borderRadius: 'var(--radius-sm)',
-                    boxShadow: 'var(--shadow-md)',
-                    minWidth: '130px',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--r-sm)',
+                    boxShadow: 'var(--shadow-lg)',
+                    minWidth: '140px',
                     zIndex: 1000,
                     overflow: 'hidden',
+                    animation: 'fadeIn 0.15s ease',
                   }}
                 >
                   {languages.map((l) => (
@@ -197,17 +234,18 @@ export const Navbar = () => {
                       key={l.code}
                       onClick={() => {
                         changeLanguage(l.code);
-                        setLangDropdownOpen(false);
+                        setLangOpen(false);
                       }}
                       style={{
                         width: '100%',
                         textAlign: 'left',
-                        padding: '10px 14px',
-                        fontSize: '0.86rem',
+                        padding: '9px 14px',
+                        fontSize: '0.84rem',
                         fontWeight: lang === l.code ? 600 : 400,
-                        color: lang === l.code ? 'var(--accent-gold)' : 'var(--text-primary)',
-                        backgroundColor: lang === l.code ? 'var(--surface-hover)' : 'transparent',
+                        color: lang === l.code ? 'var(--accent)' : 'var(--text-primary)',
+                        backgroundColor: lang === l.code ? 'var(--accent-subtle)' : 'transparent',
                         display: 'block',
+                        transition: 'background 0.1s ease',
                       }}
                     >
                       {l.label}
@@ -217,53 +255,43 @@ export const Navbar = () => {
               )}
             </div>
 
-            {/* Dark / Light Toggle */}
+            {/* Theme */}
             <button
               onClick={toggleTheme}
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border-light)',
-                background: 'var(--surface)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-primary)',
-                transition: 'all var(--transition-fast)',
-              }}
+              className="btn-icon"
+              style={{ width: '36px', height: '36px' }}
               title={isDark ? 'Light Mode' : 'Dark Mode'}
               aria-label="Toggle theme"
             >
-              {isDark ? <Sun size={18} color="#d4af37" /> : <Moon size={18} />}
+              {isDark ? <Sun size={16} color="var(--accent)" /> : <Moon size={16} />}
             </button>
 
-            {/* Telegram Bot Settings Modal Trigger */}
+            {/* TG Bot */}
             <button
               onClick={openSettingsModal}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
-                padding: '6px 12px',
-                borderRadius: 'var(--radius-sm)',
-                background: '#24A1DE',
+                gap: '5px',
+                padding: '6px 10px',
+                borderRadius: 'var(--r-sm)',
+                background: '#229ED9',
                 color: '#fff',
-                fontSize: '0.82rem',
+                fontSize: '0.78rem',
                 fontWeight: 600,
-                boxShadow: '0 2px 10px rgba(36, 161, 222, 0.3)',
+                transition: 'background 0.15s ease',
               }}
-              title="Telegram Bot Integratsiyasi"
+              title="Telegram Bot"
             >
-              <Send size={15} />
-              <span className="desktop-only-text">TG Bot</span>
+              <Send size={13} />
+              <span className="desktop-only-text">Bot</span>
               {botToken ? (
                 <span
                   style={{
-                    width: '7px',
-                    height: '7px',
+                    width: '6px',
+                    height: '6px',
                     borderRadius: '50%',
-                    backgroundColor: '#00ff88',
+                    backgroundColor: '#34d399',
                     display: 'inline-block',
                   }}
                   title="Bot ulangan"
@@ -271,122 +299,57 @@ export const Navbar = () => {
               ) : null}
             </button>
 
-            {/* Wishlist Link */}
+            {/* Wishlist */}
             <Link
               to="/wishlist"
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border-light)',
-                background: 'var(--surface)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-primary)',
-                position: 'relative',
-              }}
+              className="btn-icon"
+              style={{ width: '36px', height: '36px', position: 'relative' }}
               title={t.nav.wishlist}
               aria-label="Wishlist"
             >
-              <Heart size={18} />
+              <Heart size={16} />
               {totalWishlist > 0 && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    top: '-6px',
-                    right: '-6px',
-                    backgroundColor: 'var(--accent-gold)',
-                    color: '#0d0f12',
-                    fontSize: '0.7rem',
-                    fontWeight: 700,
-                    width: '18px',
-                    height: '18px',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {totalWishlist}
-                </span>
+                <span style={badgeCountStyle}>{totalWishlist}</span>
               )}
             </Link>
 
-            {/* Cart Link */}
+            {/* Cart */}
             <Link
               to="/cart"
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border-light)',
-                background: 'var(--surface)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-primary)',
-                position: 'relative',
-              }}
+              className="btn-icon"
+              style={{ width: '36px', height: '36px', position: 'relative' }}
               title={t.nav.cart}
               aria-label="Shopping Cart"
             >
-              <ShoppingBag size={18} />
+              <ShoppingBag size={16} />
               {totalItems > 0 && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    top: '-6px',
-                    right: '-6px',
-                    backgroundColor: 'var(--accent-gold)',
-                    color: '#0d0f12',
-                    fontSize: '0.7rem',
-                    fontWeight: 700,
-                    width: '18px',
-                    height: '18px',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {totalItems}
-                </span>
+                <span style={badgeCountStyle}>{totalItems}</span>
               )}
             </Link>
 
-            {/* Admin Panel Link */}
+            {/* Admin */}
             <Link
               to="/admin"
+              className="btn-icon"
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '6px 10px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border-light)',
-                background: 'var(--surface)',
-                color: 'var(--text-primary)',
-                fontSize: '0.82rem',
-                fontWeight: 600,
-                textDecoration: 'none',
+                width: '36px',
+                height: '36px',
               }}
-              title="Admin Panel (Boshqaruv)"
+              title="Admin Panel"
             >
-              <Sliders size={15} color="var(--accent-gold)" />
-              <span className="desktop-only-text">Admin</span>
+              <Sliders size={14} color="var(--accent)" />
             </Link>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="mobile-menu-btn"
               style={{
                 display: 'none',
-                width: '38px',
-                height: '38px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border-light)',
+                width: '36px',
+                height: '36px',
+                borderRadius: 'var(--r-sm)',
+                border: '1px solid var(--border)',
                 background: 'var(--surface)',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -394,13 +357,13 @@ export const Navbar = () => {
               }}
               aria-label="Open navigation menu"
             >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div
           style={{
@@ -413,38 +376,40 @@ export const Navbar = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            borderTop: '1px solid var(--border-light)',
+            borderTop: '1px solid var(--border)',
             animation: 'fadeIn 0.2s ease',
+            overflowY: 'auto',
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}
+                end={link.to === '/'}
                 onClick={() => setMobileMenuOpen(false)}
                 style={({ isActive }) => ({
-                  color: isActive ? 'var(--accent-gold)' : 'var(--text-primary)',
-                  fontWeight: isActive ? 600 : 500,
-                  fontSize: '1.2rem',
-                  padding: '8px 0',
-                  borderBottom: '1px solid var(--border-light)',
+                  color: isActive ? 'var(--accent)' : 'var(--text-primary)',
+                  fontWeight: isActive ? 600 : 400,
+                  fontSize: '1.1rem',
+                  padding: '14px 0',
+                  borderBottom: '1px solid var(--border)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                 })}
               >
                 <span>{link.label}</span>
-                <span style={{ fontSize: '0.8rem', color: 'var(--accent-gold)' }}>→</span>
+                <ChevronDown size={16} style={{ transform: 'rotate(-90deg)', opacity: 0.4 }} />
               </NavLink>
             ))}
           </div>
 
-          <div style={{ paddingTop: '24px', borderTop: '1px solid var(--border-light)' }}>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+          <div style={{ paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
               {t.brandTagline}
             </p>
-            <div style={{ display: 'flex', gap: '12px' }}>
+            <div style={{ display: 'flex', gap: '10px' }}>
               <a
                 href="tel:+998712004488"
                 className="btn btn-secondary btn-sm"
@@ -466,22 +431,23 @@ export const Navbar = () => {
           </div>
         </div>
       )}
-
-      <style>{`
-        @media (min-width: 992px) {
-          .desktop-nav {
-            display: flex !important;
-          }
-        }
-        @media (max-width: 991px) {
-          .mobile-menu-btn {
-            display: flex !important;
-          }
-          .desktop-only-text {
-            display: none;
-          }
-        }
-      `}</style>
     </>
   );
+};
+
+const badgeCountStyle = {
+  position: 'absolute',
+  top: '-4px',
+  right: '-4px',
+  backgroundColor: 'var(--accent)',
+  color: '#0e100f',
+  fontSize: '0.65rem',
+  fontWeight: 700,
+  width: '16px',
+  height: '16px',
+  borderRadius: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  lineHeight: 1,
 };
