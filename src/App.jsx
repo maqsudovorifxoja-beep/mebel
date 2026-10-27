@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import { ComparisonProvider } from './context/ComparisonContext';
 import { TelegramProvider } from './context/TelegramContext';
 import { ProductProvider } from './context/ProductContext';
 import { OrderProvider } from './context/OrderContext';
@@ -14,6 +15,7 @@ import { Footer } from './components/layout/Footer';
 import { TelegramSettingsModal } from './components/layout/TelegramSettingsModal';
 import { ToastContainer } from './components/common/ToastContainer';
 import { AIAssistantWidget } from './components/ai/AIAssistantWidget';
+import { ComparisonDrawer } from './components/catalog/ComparisonDrawer';
 
 import { HomePage } from './pages/HomePage';
 import { CatalogPage } from './pages/CatalogPage';
@@ -83,16 +85,19 @@ export function App() {
             <AuthProvider>
               <CartProvider>
                 <WishlistProvider>
-                  <TelegramProvider>
-                    <BrowserRouter>
-                      <ScrollToTop />
-                      <AppContent />
-                      {/* Global Modals, AI Assistant & Notifications */}
-                      <TelegramSettingsModal />
-                      <ToastContainer />
-                      <AIAssistantWidget />
-                    </BrowserRouter>
-                  </TelegramProvider>
+                  <ComparisonProvider>
+                    <TelegramProvider>
+                      <BrowserRouter>
+                        <ScrollToTop />
+                        <AppContent />
+                        {/* Global Modals, Comparison Drawer, AI Assistant & Notifications */}
+                        <ComparisonDrawer />
+                        <TelegramSettingsModal />
+                        <ToastContainer />
+                        <AIAssistantWidget />
+                      </BrowserRouter>
+                    </TelegramProvider>
+                  </ComparisonProvider>
                 </WishlistProvider>
               </CartProvider>
             </AuthProvider>

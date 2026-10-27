@@ -4,6 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
+import { useComparison } from '../../context/ComparisonContext';
 import { useTelegram } from '../../context/TelegramContext';
 import {
   Sun,
@@ -17,6 +18,7 @@ import {
   ChevronDown,
   PhoneCall,
   Sliders,
+  Scale,
 } from 'lucide-react';
 
 export const Navbar = () => {
@@ -24,6 +26,7 @@ export const Navbar = () => {
   const { isDark, toggleTheme } = useTheme();
   const { totalItems } = useCart();
   const { totalWishlist } = useWishlist();
+  const { totalCompared, openDrawer: openComparisonDrawer } = useComparison();
   const { openSettingsModal, botToken } = useTelegram();
   const location = useLocation();
 
@@ -297,6 +300,20 @@ export const Navbar = () => {
                   title="Bot ulangan"
                 />
               ) : null}
+            </button>
+
+            {/* Comparison */}
+            <button
+              onClick={openComparisonDrawer}
+              className="btn-icon"
+              style={{ width: '36px', height: '36px', position: 'relative' }}
+              title={lang === 'uz' ? 'Taqqoslash' : 'Сравнение моделей'}
+              aria-label="Compare"
+            >
+              <Scale size={16} />
+              {totalCompared > 0 && (
+                <span style={badgeCountStyle}>{totalCompared}</span>
+              )}
             </button>
 
             {/* Wishlist */}

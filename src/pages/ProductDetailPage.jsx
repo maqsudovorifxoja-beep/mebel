@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useComparison } from '../context/ComparisonContext';
 import { useTelegram } from '../context/TelegramContext';
 import { useProducts } from '../context/ProductContext';
 import { useOrders } from '../context/OrderContext';
@@ -18,7 +19,8 @@ import {
   Sparkles, 
   Ruler, 
   ArrowLeft,
-  Share2
+  Share2,
+  Scale
 } from 'lucide-react';
 
 export const ProductDetailPage = () => {
@@ -27,6 +29,7 @@ export const ProductDetailPage = () => {
   const { lang, t } = useLanguage();
   const { addToCart } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
+  const { isCompared, toggleCompare } = useComparison();
   const { submitOrder, addToast } = useTelegram();
   const { products } = useProducts();
   const { addOrder } = useOrders();
@@ -192,24 +195,57 @@ export const ProductDetailPage = () => {
                 {product.badge ? product.badge.toUpperCase() : 'PREMIUM'}
               </span>
 
-              <button
-                onClick={() => toggleWishlist(product.id)}
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  border: '1px solid var(--border-light)',
-                  background: 'var(--surface)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: wishlisted ? '#e53935' : 'var(--text-primary)',
-                  boxShadow: 'var(--shadow-sm)',
-                }}
-                aria-label="Wishlist toggle"
-              >
-                <Heart size={20} fill={wishlisted ? '#e53935' : 'none'} />
-              </button>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => {
+                    const res = toggleCompare(product);
+                    if (res.action === 'added') {
+                      addToast(`${product.name[lang] || product.name.uz} taqqoslashga qoʻshildi`, 'info');
+                    } else if (res.action === 'removed') {
+                      addToast(`${product.name[lang] || product.name.uz} taqqoslashdan olib tashlandi`, 'info');
+                    } else if (res.reason === 'limit_reached') {
+                      addToast('Maksimal 4 ta mebelni taqqoslashingiz mumkin', 'warning');
+                    }
+                  }}
+                  style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '50%',
+                    border: '1px solid var(--border-light)',
+                    background: isCompared(product.id) ? 'var(--accent-subtle)' : 'var(--surface)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: isCompared(product.id) ? 'var(--accent)' : 'var(--text-primary)',
+                    boxShadow: 'var(--shadow-sm)',
+                    cursor: 'pointer',
+                  }}
+                  title={isCompared(product.id) ? 'Taqqoslashdan olib tashlash' : 'Taqqoslashga qoʻshish'}
+                  aria-label="Compare toggle"
+                >
+                  <Scale size={18} />
+                </button>
+
+                <button
+                  onClick={() => toggleWishlist(product.id)}
+                  style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '50%',
+                    border: '1px solid var(--border-light)',
+                    background: 'var(--surface)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: wishlisted ? '#e53935' : 'var(--text-primary)',
+                    boxShadow: 'var(--shadow-sm)',
+                    cursor: 'pointer',
+                  }}
+                  aria-label="Wishlist toggle"
+                >
+                  <Heart size={20} fill={wishlisted ? '#e53935' : 'none'} />
+                </button>
+              </div>
             </div>
 
             <h1

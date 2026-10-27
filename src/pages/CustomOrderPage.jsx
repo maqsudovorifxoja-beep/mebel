@@ -3,7 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useTelegram } from '../context/TelegramContext';
 import { useOrders } from '../context/OrderContext';
 import { 
-  Ruler, 
+  Ruler,
   Send, 
   CheckCircle2, 
   Sparkles, 

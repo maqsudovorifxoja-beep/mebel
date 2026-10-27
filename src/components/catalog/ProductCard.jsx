@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
+import { useComparison } from '../../context/ComparisonContext';
 import { useTelegram } from '../../context/TelegramContext';
-import { Heart, ShoppingBag, Eye, Star, Check } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, Star, Check, Scale } from 'lucide-react';
 
 export const ProductCard = ({ product, onQuickView }) => {
   const { lang, t } = useLanguage();
   const { addToCart } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
+  const { isCompared, toggleCompare } = useComparison();
   const { addToast } = useTelegram();
 
   const [selectedColor, setSelectedColor] = useState(
@@ -37,8 +39,22 @@ export const ProductCard = ({ product, onQuickView }) => {
     toggleWishlist(product.id);
   };
 
+  const handleToggleCompare = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const res = toggleCompare(product);
+    if (res.action === 'added') {
+      addToast(`${product.name[lang] || product.name.uz} taqqoslashga qoʻshildi`, 'info');
+    } else if (res.action === 'removed') {
+      addToast(`${product.name[lang] || product.name.uz} taqqoslashdan olib tashlandi`, 'info');
+    } else if (res.reason === 'limit_reached') {
+      addToast('Maksimal 4 ta mebelni taqqoslashingiz mumkin', 'warning');
+    }
+  };
+
   const title = product.name[lang] || product.name.uz;
   const wishlisted = isWishlisted(product.id);
+  const compared = isCompared(product.id);
 
   return (
     <div
@@ -104,6 +120,19 @@ export const ProductCard = ({ product, onQuickView }) => {
             aria-label="Wishlist toggle"
           >
             <Heart size={14} fill={wishlisted ? '#e53935' : 'none'} />
+          </button>
+
+          <button
+            onClick={handleToggleCompare}
+            style={{
+              ...actionBtnStyle,
+              color: compared ? 'var(--accent)' : 'var(--text-primary)',
+              backgroundColor: compared ? 'var(--accent-subtle)' : 'var(--surface)',
+            }}
+            title={compared ? 'Taqqoslashdan olib tashlash' : 'Taqqoslashga qoʻshish'}
+            aria-label="Compare toggle"
+          >
+            <Scale size={14} />
           </button>
 
           {onQuickView && (
